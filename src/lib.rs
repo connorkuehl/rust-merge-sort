@@ -26,12 +26,11 @@ pub fn merge_sort<T: Copy + PartialOrd>(arr: &mut [T]) {
 /// * `arr` - the slice to split, sort, and then merge
 fn merge_helper<T: Copy + PartialOrd>(arr: &mut [T]) -> Vec<T> {
     let len = arr.len();
-    let mut sorted = Vec::new();
+    
     // Only 1 item, this is the finest slice we can split to.
     if len == 1 {
         // Conveniently, a slice with 1 item is already sorted.
-        sorted.push(arr[0]);
-        return sorted;
+        return vec![arr[0]];
     }
 
     // Haven't reached the base case, so we will split this
@@ -41,9 +40,7 @@ fn merge_helper<T: Copy + PartialOrd>(arr: &mut [T]) -> Vec<T> {
     
     // Merge these two slices, both of which should now already 
     // be sorted.
-    sorted = merge(left, right);
-
-    sorted
+    merge(left, right)
 }
 
 /// Merges two slices according to the ordering of their elements (this
