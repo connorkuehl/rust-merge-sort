@@ -90,4 +90,20 @@ mod tests {
         merge_sort(&mut arr);
         assert_eq!(arr, expect);
     }
+
+    #[test]
+    fn test_odd_length() {
+        let mut arr = vec![2, 1, 3];
+        let expect = vec![1, 2, 3];
+        merge_sort(&mut arr);
+        assert_eq!(arr, expect);
+    }
+
+    #[test]
+    fn test_duplicates() {
+        let mut arr = vec![3, 3, 4, 5, 4, 5, 1, 2, 2, 1];
+        let expect = vec![1, 1, 2, 2, 3, 3, 4, 4, 5, 5];
+        merge_sort(&mut arr);
+        assert_eq!(arr, expect);
+    }
 }
