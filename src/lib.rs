@@ -1,5 +1,11 @@
 use std::vec::Vec;
 
+/// Applies a merge sort to the slice given.
+/// https://en.wikipedia.org/wiki/Merge_sort
+///
+/// # Arguments
+///
+/// * `arr` - A slice to be sorted.
 pub fn merge_sort<T: Copy + PartialOrd>(arr: &mut [T]) {
     if arr.len() == 0 {
         return;
@@ -9,32 +15,69 @@ pub fn merge_sort<T: Copy + PartialOrd>(arr: &mut [T]) {
     arr.copy_from_slice(sorted.as_slice());
 }
 
+/// Recursively splits the slice into progressively smaller
+/// slices for sorting each one. It will continue to recurse,
+/// splitting the slice until the resultant slices are of size
+/// 1. When the recursion is unwinding, these much smaller slices
+/// are merged into a buffer according to their order and returned.
+///
+/// # Arguments
+///
+/// * `arr` - the slice to split, sort, and then merge
 fn merge_helper<T: Copy + PartialOrd>(arr: &mut [T]) -> Vec<T> {
     let len = arr.len();
     let mut sorted = Vec::new();
+    // Only 1 item, this is the finest slice we can split to.
     if len == 1 {
+        // Conveniently, a slice with 1 item is already sorted.
         sorted.push(arr[0]);
         return sorted;
     }
 
+    // Haven't reached the base case, so we will split this
+    // slice into two parts (the first half and the second half).
     let left  = merge_helper(&mut arr[0..(len/2)]);
     let right = merge_helper(&mut arr[(len/2)..len]);
+    
+    // Merge these two slices, both of which should now already 
+    // be sorted.
     sorted = merge(left, right);
 
     sorted
 }
 
+/// Merges two slices according to the ordering of their elements (this
+/// is basically the "sort" part of merge sort.
+///
+/// # Arguments
+///
+/// `first` - the first slice to merge in.
+/// `second` - the second slice to merge in.
+///
+/// # Returns 
+///
+/// The sorted merge of the two slices.
 fn merge<T: Copy + PartialOrd>(first: Vec<T>, second: Vec<T>) -> Vec<T> {
+    // Keep track of our lengths
     let first_len = first.len();
     let secnd_len = second.len();
 
+    // This will be used to index into the first slice for copying
+    // that item.
     let mut f = 0;
+    // Like above, but this one will keep track of our index for
+    // items in the second slice.
     let mut s = 0;
 
+    // This will be the sorted, merged slice!
     let mut sorted = vec![];
 
+    // If f or s are less than their respective lengths, that means
+    // we haven't visited the f'th or s'th element in the slice and
+    // we're not done merging!
     while f < first_len || s < secnd_len {
         if f < first_len && s < secnd_len {
+            // Simply compare the two.
             if first[f] <= second[s] {
                 sorted.push(first[f]);
                 f += 1;
@@ -43,10 +86,14 @@ fn merge<T: Copy + PartialOrd>(first: Vec<T>, second: Vec<T>) -> Vec<T> {
                 s += 1;
             }
         }
+        // We've copied all of the first slice's data in, so
+        // just get the rest of the second slice's data.
         else if f >= first_len {
             sorted.push(second[s]);
             s += 1;
         } else {
+            // Or maybe we've already copied all the second slice's
+            // data, so we'll copy in the rest of the first slice.
             sorted.push(first[f]);
             f += 1;
         }
