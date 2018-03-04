@@ -150,4 +150,20 @@ mod tests {
         merge_sort(&mut arr);
         assert_eq!(arr, expect);
     }
+
+    #[test]
+    fn test_empty() {
+        let mut arr: Vec<i32> = vec![];
+        let expect = vec![];
+        merge_sort(&mut arr);
+        assert_eq!(arr, expect);
+    }
+
+    #[test]
+    fn test_one() {
+        let mut arr = vec![999];
+        let expect = vec![999];
+        merge_sort(&mut arr);
+        assert_eq!(arr, expect);
+    }
 }
